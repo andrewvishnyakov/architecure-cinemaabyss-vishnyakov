@@ -126,14 +126,6 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Trigger API Tests workflow
-        uses: peter-evans/workflow-dispatch@v1
-        with:
-          repository: ${{ github.repository }}
-          workflow: api-tests.yml
-          ref: ${{ github.ref_name }}
-          inputs: '{"environment":"docker"}'
-
 
 
       
