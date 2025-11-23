@@ -126,9 +126,14 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Run API Tests
-        working-directory: tests/postman
-        run: npm run test:local
+      - name: Trigger API Tests workflow
+        uses: peter-evans/workflow-dispatch@v1
+        with:
+          repository: ${{ github.repository }}
+          workflow: api-tests.yml
+          ref: ${{ github.ref_name }}
+          inputs:
+            environment: docker
 
 
       
