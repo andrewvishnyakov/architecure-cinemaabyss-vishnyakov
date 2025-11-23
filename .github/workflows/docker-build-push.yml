@@ -132,8 +132,8 @@ jobs:
           repository: ${{ github.repository }}
           workflow: api-tests.yml
           ref: ${{ github.ref_name }}
-          inputs:
-            environment: docker
+          inputs: '{"environment":"docker"}'
+
 
 
       
