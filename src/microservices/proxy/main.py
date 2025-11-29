@@ -58,10 +58,11 @@ async def movies_proxy(request: Request):
 async def fallback_proxy(path: str, request: Request):
     start_time = time.time()
     target_url = MONOLITH_URL
-    full_url = target_url + "/" + path + ("?" + str(request.url.query) if request.url.query else "")
+    # ✅ ФИКС: используем request.url.path вместо path
+    clean_path = str(request.url.path) + ("?" + str(request.url.query) if request.url.query else "")
+    full_url = target_url + clean_path
 
-    logger.debug(f"Incoming fallback request {request.method} {request.url}")
-    logger.debug(f"Proxying to fallback URL: {full_url}")
+    logger.info(f"[{request.method}] {request.url.path} → monolith:{full_url}")  # Лог для отладки
 
     body = await request.body()
     headers = dict(request.headers)
@@ -76,9 +77,10 @@ async def fallback_proxy(path: str, request: Request):
             timeout=10.0
         )
         elapsed_ms = (time.time() - start_time) * 1000
-        logger.debug(f"Response from fallback backend: {response.status_code} in {elapsed_ms:.2f}ms")
+        logger.info(f"Monolith response: {response.status_code} in {elapsed_ms:.2f}ms")
+        return response.content, response.status_code, response.headers.items()
     except httpx.RequestError as e:
-        logger.error(f"Error during fallback proxying request: {e}")
-        raise HTTPException(status_code=502, detail=f"Ошибка проксирования: {e}")
+        logger.error(f"Monolith error: {e}")
+        raise HTTPException(status_code=502, detail=f"Monolith unavailable: {e}")
 
     return response.content, response.status_code, response.headers.items()
