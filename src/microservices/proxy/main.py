@@ -106,8 +106,7 @@ async def fallback_proxy(path: str, request: Request):
         raise HTTPException(status_code=502, detail=f"Monolith unavailable: {e}")
 
 
-    # После try-except блока:
-    from fastapi.responses import StreamingResponse  # Добавьте в импорт
+    from fastapi.responses import StreamingResponse 
     
     backend_path = str(request.url.path)
     
