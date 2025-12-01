@@ -5,7 +5,11 @@
 1. Спроектируйте to be архитектуру КиноБездны, разделив всю систему на отдельные домены и организовав интеграционное взаимодействие и единую точку вызова сервисов.
 Результат представьте в виде контейнерной диаграммы в нотации С4.
 Добавьте ссылку на файл в этот шаблон
-[ссылка на файл](ссылка)
+
+```markdown
+![Диаграмма контейнеров](/diagrams/C4_cont.svg)
+```
+
 
 # Задание 2
 
@@ -59,6 +63,12 @@
 Необходимые тесты для проверки этого API вызываются при запуске npm run test:local из папки tests/postman 
 Приложите скриншот тестов и скриншот состояния топиков Kafka из UI http://localhost:8090 
 
+```markdown
+![тесты](/task2/postman-tests.png)
+![состояние топиков](/task2/Kafka-topics.png)
+```
+
+
 # Задание 3
 
 Команда начала переезд в Kubernetes для лучшего масштабирования и повышения надежности. 
@@ -109,6 +119,9 @@ jobs:
 Как только сборка отработает и в github registry появятся ваши образы, можно переходить к блоку настройки Kubernetes
 Успешным результатом данного шага является "зеленая" сборка и "зеленые" тесты
 
+```markdown
+![workflow_actions](/task3_screenshot/workflow_actions.png)
+```
 
 ### Proxy в Kubernetes
 
@@ -272,8 +285,19 @@ cat .docker/config.json | base64
   Часть тестов с health-чек упадет, но создание событий отработает.
   Откройте логи event-service и сделайте скриншот обработки событий
 
+```markdown
+![event-service](/task3_screenshot/2.png)
+```
+
+
 #### Шаг 3
 Добавьте сюда скриншота вывода при вызове https://cinemaabyss.example.com/api/movies и  скриншот вывода event-service после вызова тестов.
+
+```markdown
+![https://cinemaabyss.example.com/api/movies-output](/task3_screenshot/1.png)
+![event-service](/task3_screenshot/3.png)
+```
+
 
 
 # Задание 4
@@ -349,6 +373,16 @@ minikube tunnel
 Потом вызовите 
 https://cinemaabyss.example.com/api/movies
 и приложите скриншот развертывания helm и вывода https://cinemaabyss.example.com/api/movies
+
+```markdown
+![helm-output](/task4/helm_output.png)
+![api-movies](/task4/api_movies.png)
+```
+
+исправил ряд ошибок в прокси-сервисе, в манифестах helm
+```markdown
+![helm-tests](/task4/task4_tests.png)
+```
 
 ## Удаляем все
 

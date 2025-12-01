@@ -24,8 +24,44 @@ spec:
         app: events-service
     spec:
       containers:
-      - name: events-service
-       .... тут
+        - name: events-service
+          image: "{{ .Values.eventsService.image.repository }}:{{ .Values.eventsService.image.tag }}"
+          imagePullPolicy: {{ .Values.eventsService.image.pullPolicy }}
+          ports:
+            - containerPort: 8082
+          env:
+            - name: PORT
+              value: "8082"
+            - name: DB_CONNECTION_STRING
+              value: "postgres://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=disable"
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.configMap.name }}
+            - secretRef:
+                name: {{ .Values.secret.name }}
+          resources:
+            limits:
+              cpu: {{ .Values.eventsService.resources.limits.cpu }}
+              memory: {{ .Values.eventsService.resources.limits.memory }}
+            requests:
+              cpu: {{ .Values.eventsService.resources.requests.cpu }}
+              memory: {{ .Values.eventsService.resources.requests.memory }}
+          readinessProbe:
+            httpGet:
+              path: /api/events/health
+              port: 8082
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /api/events/health
+              port: 8082
+            initialDelaySeconds: 15
+            periodSeconds: 20
+      restartPolicy: Always
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecrets.name }}
+
 ---
 apiVersion: v1
 kind: Service
@@ -37,5 +73,10 @@ metadata:
     app.kubernetes.io/name: {{ include "cinemaabyss.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
 spec:
- ........ и тут
-{{- end }}
+  selector:
+    app: events-service
+  ports:
+    - port: 8082
+      targetPort: 8082
+  type: ClusterIP
+  {{- end }}

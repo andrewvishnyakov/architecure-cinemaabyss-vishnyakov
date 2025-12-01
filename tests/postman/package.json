@@ -7,7 +7,7 @@
     "test": "node run-tests.js",
     "test:local": "node run-tests.js --environment local",
     "test:docker": "node run-tests.js --environment docker",
-    "test:kubernetes": "node run-tests.js --environment kubernetes"
+    "test:kubernetes": "sh reset-test.sh"
   },
   "keywords": [
     "postman",
@@ -19,7 +19,9 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "newman": "^5.3.2",
     "yargs": "^17.6.2"
+  },
+  "devDependencies": {
+    "newman": "^6.2.1"
   }
 }

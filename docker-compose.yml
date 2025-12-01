@@ -99,7 +99,7 @@ services:
     networks:
       - cinemaabyss-network
 
-  # Proxy Service (API Gateway)
+  # Proxy Service
   proxy-service:
     build:
       context: ./src/microservices/proxy

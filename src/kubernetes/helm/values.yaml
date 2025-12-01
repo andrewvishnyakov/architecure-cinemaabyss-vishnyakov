@@ -3,9 +3,14 @@ global:
   namespace: cinemaabyss
   domain: cinemaabyss.example.com
 
+configMap:
+  name: cinemaabyss-config
+secret:
+  name: cinemaabyss-secrets
+
 # Image pull secrets
 imagePullSecrets:
-  dockerconfigjson: ewoJImF1dGhzIjogewoJCSJnaGNyLmlvIjogewoJCQkiYXV0aCI6
+  dockerconfigjson: ewoJImF1dGhzIjogewoJCSJnaGNyLmlvIjogewoJCQkiYXV0aCI6ICJZVzVrY21WM2RtbHphRzU1WVd0dmRqcG5hSEJmU0dkWlpUTklNVzAxT0hsWE5FMVJWRFpUWm1kd1dXbzRkMVZ5UTI5a01rSTBORXRxIgoJCX0KCX0KfQ==
 # Database configuration
 database:
   host: postgres
@@ -33,7 +38,7 @@ database:
 monolith:
   enabled: true
   image:
-    repository: ghcr.io/db-exp/cinemaabysstest/monolith
+    repository: ghcr.io/andrewvishnyakov/architecure-cinemaabyss-vishnyakov/monolith
     tag: latest
     pullPolicy: Always
   replicas: 1
@@ -53,7 +58,7 @@ monolith:
 proxyService:
   enabled: true
   image:
-    repository: ghcr.io/db-exp/cinemaabysstest/proxy-service
+    repository: ghcr.io/andrewvishnyakov/architecure-cinemaabyss-vishnyakov/proxy-service
     tag: latest
     pullPolicy: Always
   replicas: 1
@@ -65,7 +70,7 @@ proxyService:
       cpu: 100m
       memory: 128Mi
   service:
-    port: 80
+    port: 8000
     targetPort: 8000
     type: ClusterIP
 
@@ -73,7 +78,7 @@ proxyService:
 moviesService:
   enabled: true
   image:
-    repository: ghcr.io/db-exp/cinemaabysstest/movies-service
+    repository: ghcr.io/andrewvishnyakov/architecure-cinemaabyss-vishnyakov/movies-service
     tag: latest
     pullPolicy: Always
   replicas: 1
@@ -93,7 +98,7 @@ moviesService:
 eventsService:
   enabled: true
   image:
-    repository: ghcr.io/db-exp/cinemaabysstest/events-service
+    repository: ghcr.io/andrewvishnyakov/architecure-cinemaabyss-vishnyakov/events-service
     tag: latest
     pullPolicy: Always
   replicas: 1
@@ -172,7 +177,11 @@ ingress:
         - path: /
           pathType: Prefix
           service: proxy-service
-          port: 80
+          port: 8000
+        - path: /api/movies
+          pathType: Prefix
+          service: movies-service
+          port: 8081
         - path: /api/events
           pathType: Prefix
           service: events-service
