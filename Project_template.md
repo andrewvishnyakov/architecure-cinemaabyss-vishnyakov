@@ -379,6 +379,10 @@ https://cinemaabyss.example.com/api/movies
 ![api-movies](/task4/api_movies.png)
 ```
 
+исправил ряд ошибок в прокси-сервисе, в манифестах helm
+```markdown
+![helm-tests](/task4/task4_tests.png)
+```
 
 ## Удаляем все
 
