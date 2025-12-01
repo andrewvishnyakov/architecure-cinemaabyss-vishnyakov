@@ -36,9 +36,9 @@ spec:
               value: "postgres://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=disable"
           envFrom:
             - configMapRef:
-                name: {{ .Values.configMap.name }}
+                name: cinemaabyss-config
             - secretRef:
-                name: {{ .Values.secret.name }}
+                name: cinemaabyss-secrets
           resources:
             limits:
               cpu: {{ .Values.proxyService.resources.limits.cpu }}
@@ -48,7 +48,8 @@ spec:
               memory: {{ .Values.proxyService.resources.requests.memory }}
       restartPolicy: Always
       imagePullSecrets:
-        - name: {{ .Values.imagePullSecrets.name }}
+        - name: dockerconfigjson
+#        - name: {{ .Values.imagePullSecrets.name }}
 
 ---
 apiVersion: v1
